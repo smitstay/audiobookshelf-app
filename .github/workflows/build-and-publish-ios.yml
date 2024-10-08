@@ -1,0 +1,61 @@
+name: Build and Push to Testflight
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: macos-latest
+
+    env:
+      NODE_VERSION: '20'
+      RUBY_VERSION: '3.1'
+      FASTLANE_DISABLE_COLORS: 'true'
+      FASTLANE_APPLE_ID: '${{ secrets.FASTLANE_APPLE_ID }}'
+      FASTLANE_PASSWORD: '${{ secrets.FASTLANE_PASSWORD }}'
+      DEVELOPER_APP_ID: '${{ secrets.DEVELOPER_APP_ID }}'
+      APPLE_KEY_ID: '${{ secrets.APPLE_KEY_ID }}'
+      APPLE_ISSUER_ID: '${{ secrets.APPLE_ISSUER_ID }}'
+      APPLE_KEY_CONTENT: '${{ secrets.APPLE_KEY_CONTENT }}'
+      TEAM_ID: '${{ secrets.TEAM_ID }}'
+      ITC_TEAM_ID: '${{ secrets.ITC_TEAM_ID }}'
+      BUNDLE_IDENTIFIER: '${{ secrets.BUNDLE_IDENTIFIER }}'
+      MATCH_GIT_BASIC_AUTHORIZATION: '${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}'
+      MATCH_GIT_URL: '${{ secrets.MATCH_GIT_URL }}'
+      MATCH_PASSWORD: '${{ secrets.MATCH_PASSWORD }}'
+      PROVISIONING_PROFILE: '${{ secrets.PROVISIONING_PROFILE }}'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set Xcode version
+        run: sudo xcode-select --switch /Applications/Xcode_16.app
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Set Up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          cache-bundle: true
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Install Ruby Dependencies
+        run: bundle install
+
+      - name: Remove pod lock
+        run: rm ios/App/Podfile.lock
+
+      - name: Run Fastlane CI/CD
+        run: bundle exec fastlane beta

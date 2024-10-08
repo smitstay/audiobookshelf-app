@@ -1,0 +1,8 @@
+git_url(ENV["MATCH_GIT_URL"])
+storage_mode("git")
+
+type("appstore") # The default type, can be: appstore, adhoc, enterprise or development
+
+app_identifier(BUNDLE_IDENTIFIER = ENV["BUNDLE_IDENTIFIER"])
+username(ENV["FASTLANE_APPLE_ID"]) # Apple Developer Portal username
+

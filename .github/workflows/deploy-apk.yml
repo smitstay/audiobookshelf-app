@@ -3,7 +3,8 @@ name: Publish Test App
 on:
   push:
     branches:
-      - master
+      - xxx
+      # - master
     paths-ignore:
       - 'ios/**'
       - 'readme.md'

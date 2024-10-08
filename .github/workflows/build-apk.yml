@@ -2,13 +2,17 @@ name: Build APK
 
 on:
   push:
-    paths-ignore:
-      - 'ios/**'
-      - 'readme.md'
-  pull_request:
-    paths-ignore:
-      - 'ios/**'
-      - 'readme.md'
+    branches:
+      - xxx
+# on:
+#   push:
+#     paths-ignore:
+#       - 'ios/**'
+#       - 'readme.md'
+#   pull_request:
+#     paths-ignore:
+#       - 'ios/**'
+#       - 'readme.md'
 jobs:
   main:
     runs-on: ubuntu-latest

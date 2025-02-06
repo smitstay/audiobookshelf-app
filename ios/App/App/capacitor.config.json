@@ -2,10 +2,26 @@
 	"appId": "com.audiobookshelf.app",
 	"appName": "audiobookshelf-app",
 	"webDir": "dist",
-	"bundledWebRuntime": false,
 	"plugins": {
 		"CapacitorHttp": {
 			"enabled": false
 		}
-	}
+	},
+	"server": {
+		"androidScheme": "http"
+	},
+	"packageClassList": [
+		"FileSharerPlugin",
+		"KeepAwakePlugin",
+		"VolumeButtonsPlugin",
+		"AppPlugin",
+		"CAPBrowserPlugin",
+		"ClipboardPlugin",
+		"DialogPlugin",
+		"HapticsPlugin",
+		"CAPNetworkPlugin",
+		"PreferencesPlugin",
+		"StatusBarPlugin",
+		"CDVPlugin"
+	]
 }

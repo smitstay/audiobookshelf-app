@@ -42,7 +42,10 @@ data class DownloadItemPart(
       val finalDestinationUri = Uri.fromFile(finalDestinationFile)
 
       var downloadUrl = "${DeviceManager.serverAddress}${serverPath}?token=${DeviceManager.token}"
-      if (serverPath.endsWith("/cover")) downloadUrl += "&format=jpeg&raw=1" // For cover images force to jpeg
+      if (serverPath.endsWith("/cover")) {
+        downloadUrl += "&raw=1" // Download raw cover image
+      }
+
       val downloadUri = Uri.parse(downloadUrl)
       Log.d("DownloadItemPart", "Audio File Destination Uri: $destinationUri | Final Destination Uri: $finalDestinationUri | Download URI $downloadUri")
       return DownloadItemPart(
@@ -77,7 +80,7 @@ data class DownloadItemPart(
   val isInternalStorage get() = localFolderId.startsWith("internal-")
 
   @get:JsonIgnore
-  val serverUrl get() = "${DeviceManager.serverAddress}${serverPath}?token=${DeviceManager.token}"
+  val serverUrl get() = uri.toString()
 
   @JsonIgnore
   fun getDownloadRequest(): DownloadManager.Request {

@@ -134,14 +134,12 @@ export default {
         to: '/settings'
       })
 
-      if (this.$platform !== 'ios') {
-        items.push({
-          icon: 'bug_report',
-          iconOutlined: true,
-          text: this.$strings.ButtonLogs,
-          to: '/logs'
-        })
-      }
+      items.push({
+        icon: 'bug_report',
+        iconOutlined: true,
+        text: this.$strings.ButtonLogs,
+        to: '/logs'
+      })
 
       if (this.serverConnectionConfig) {
         items.push({
@@ -185,11 +183,18 @@ export default {
       await this.$hapticsImpact()
       await this.logout()
 
+      // Redirect to home page
       if (this.$route.name !== 'bookshelf') {
         this.$router.replace('/bookshelf')
-      } else {
-        location.reload()
       }
+
+      // If player is open and not playing locally, then close the player
+      if (this.$store.getters['getIsPlayerOpen']) {
+        this.$eventBus.$emit('close-stream')
+      }
+
+      // Close side drawer
+      this.show = false
     },
     touchstart(e) {
       this.touchEvent = new TouchEvent(e)

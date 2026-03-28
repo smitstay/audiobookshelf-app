@@ -1,0 +1,46 @@
+name: Sync Fork from Upstream
+
+on:
+  schedule:
+    - cron: '0 3 1 * *' # 1st of every month at 03:00 UTC
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add upstream and fetch
+        run: |
+          git remote add upstream https://github.com/advplyr/audiobookshelf-app.git
+          git fetch upstream master
+
+      - name: Attempt merge
+        id: merge
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git merge upstream/master --no-edit || echo "MERGE_CONFLICT=true" >> "$GITHUB_OUTPUT"
+
+      - name: Push if merge succeeded
+        if: steps.merge.outputs.MERGE_CONFLICT != 'true'
+        run: git push origin master
+
+      - name: Open issue if merge failed
+        if: steps.merge.outputs.MERGE_CONFLICT == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git merge --abort
+          gh issue create \
+            --title "Upstream sync failed: merge conflict" \
+            --body "The monthly sync from upstream advplyr/audiobookshelf-app failed due to merge conflicts. Please resolve manually."

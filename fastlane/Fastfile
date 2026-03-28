@@ -118,6 +118,7 @@ platform :ios do
       skip_waiting_for_build_processing: true,
       skip_submission: true,
       distribute_external: true,
+      groups: ["Friends"],
       notify_external_testers: false,
       changelog: "Sync with Audiobookshelf",
       ipa: ipa

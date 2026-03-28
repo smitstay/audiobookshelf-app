@@ -116,7 +116,7 @@ platform :ios do
       apple_id: DEVELOPER_APP_ID,
       app_identifier: BUNDLE_IDENTIFIER,
       skip_waiting_for_build_processing: true,
-      skip_submission: false,
+      skip_submission: true,
       distribute_external: true,
       groups: ["Friends"],
       notify_external_testers: false,

@@ -24,13 +24,13 @@ platform :ios do
     # Ensure you're in the project root
     Dir.chdir(File.expand_path("../..", __FILE__)) do
       # Install Node.js dependencies
-      sh "npm install"
+      sh "npm ci --omit=optional"
 
       # Generate the static web app
       sh "npm run generate"
 
       # Sync Capacitor with native projects
-      sh "npx cap sync"
+      sh "npx cap sync ios"
     end
   end
   

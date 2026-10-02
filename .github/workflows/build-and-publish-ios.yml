@@ -4,17 +4,22 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
+  schedule:
+    - cron: '0 6 1 * *' # 1st of every month, after the 03:00 upstream sync
+  workflow_dispatch:
+
+concurrency:
+  group: testflight
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
     runs-on: xcode-27
+    timeout-minutes: 60
 
     env:
       NODE_VERSION: '24'
-      RUBY_VERSION: '3.3.0'
+      RUBY_VERSION: '3.3'
       FASTLANE_DISABLE_COLORS: 'true'
       FASTLANE_APPLE_ID: '${{ secrets.FASTLANE_APPLE_ID }}'
       FASTLANE_PASSWORD: '${{ secrets.FASTLANE_PASSWORD }}'
@@ -32,13 +37,13 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set Xcode version
         run: sudo xcode-select --switch /Applications/Xcode_27.0.app
 
       - name: Set Up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -46,16 +51,10 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
-          cache-bundle: true
-
-      - name: Install Bundler
-        run: gem install bundler
-
-      - name: Install Ruby Dependencies
-        run: bundle install
+          bundler-cache: true
 
       - name: Remove pod lock
-        run: rm ios/App/Podfile.lock
+        run: rm -f ios/App/Podfile.lock
 
       - name: Run Fastlane CI/CD
         run: bundle exec fastlane beta

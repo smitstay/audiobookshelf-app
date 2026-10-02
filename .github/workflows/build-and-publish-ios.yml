@@ -10,10 +10,10 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: macos-27
+    runs-on: xcode-27
 
     env:
-      NODE_VERSION: '20'
+      NODE_VERSION: '24'
       RUBY_VERSION: '3.1'
       FASTLANE_DISABLE_COLORS: 'true'
       FASTLANE_APPLE_ID: '${{ secrets.FASTLANE_APPLE_ID }}'

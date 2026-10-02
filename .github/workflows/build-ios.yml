@@ -1,18 +1,18 @@
 name: Build iOS
 
-on:
-  push:
-    paths-ignore:
-      - 'android/**'
-      - '.github/workflows/build-apk.yml'
-      - '.github/workflows/deploy-apk.yml'
-      - 'readme.md'
-  pull_request:
-    paths-ignore:
-      - 'android/**'
-      - '.github/workflows/build-apk.yml'
-      - '.github/workflows/deploy-apk.yml'
-      - 'readme.md'
+# on:
+#   push:
+#     paths-ignore:
+#       - 'android/**'
+#       - '.github/workflows/build-apk.yml'
+#       - '.github/workflows/deploy-apk.yml'
+#       - 'readme.md'
+#   pull_request:
+#     paths-ignore:
+#       - 'android/**'
+#       - '.github/workflows/build-apk.yml'
+#       - '.github/workflows/deploy-apk.yml'
+#       - 'readme.md'
 
 permissions:
   contents: read
